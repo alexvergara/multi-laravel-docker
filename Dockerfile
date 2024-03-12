@@ -38,12 +38,12 @@ RUN for php in ${PHP_VERSIONS}; do for lib in ${PHP_LIBRARIES}; do apt-get insta
 
 # GET latest Composer version 1.10
 RUN curl -sS https://getcomposer.org/download/1.10.19/composer.phar -o composer.phar
-RUN mv composer.phar /usr/local/bin/composer1 # && chmod 770 /usr/local/bin/composer1
+RUN mv composer.phar /usr/local/bin/composer1 && chmod 755 /usr/local/bin/composer1
 
 # GET latest Composer version
 #RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer2
 RUN curl -sS https://getcomposer.org/download/2.7.2/composer.phar -o composer.phar
-RUN mv composer.phar /usr/local/bin/composer2 # && chmod 770 /usr/local/bin/composer2
+RUN mv composer.phar /usr/local/bin/composer2 && chmod 755 /usr/local/bin/composer2
 
 
 
@@ -51,7 +51,7 @@ RUN mv composer.phar /usr/local/bin/composer2 # && chmod 770 /usr/local/bin/comp
 
 # Create dev_user and group, set password as ${DEV_USER}
 RUN groupadd -g 1000 ${DEV_USER}
-RUN useradd -u 1000 -g ${DEV_USER} -m ${DEV_USER} && echo "${DEV_USER}:${DEV_USER}" | chpasswd && adduser ${DEV_USER} sudo
+RUN useradd -u 1000 -g ${DEV_USER} -m ${DEV_USER} -s /usr/bin/bash && echo "${DEV_USER}:${DEV_USER}" | chpasswd && adduser ${DEV_USER} sudo
 
 RUN echo 'export NVM_DIR="$HOME/.nvm"' >> /home/${DEV_USER}/.bashrc
 RUN echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm' >> /home/${DEV_USER}/.bashrc
@@ -71,7 +71,10 @@ EXPOSE 8000-8010
 
 
 # Switch to the dev user to run next commands and login shell
-USER ${DEV_USER}
+USER "${DEV_USER}"
+
+# Set the working directory
+WORKDIR /code/apps
 
 
 
@@ -79,11 +82,12 @@ USER ${DEV_USER}
 
 # Install NVM - Node Version Manager..... (switch Node version [nvim use 10])
 # Execute commands as a dev_user's login shell
-SHELL ["/bin/bash", "--login", "-c"]
+SHELL ["/bin/bash", "--login", "-i", "-c"]
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
 # Install Node versions
-RUN for node in ${NODE_VERSIONS}; do nvm install ${node}; done
+RUN source /home/${DEV_USER}/.bashrc && for node in ${NODE_VERSIONS}; do nvm install ${node}; done
+
 
 # // TODO:: Add node global libraries (expo? vite?)
 

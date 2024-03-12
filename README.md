@@ -22,4 +22,4 @@ The idea is to have a Docker container where I can connect and run any version o
 
 ## Run or register
 
-`docker run --rm --name devserver -v "[code-folder]:/code/apps" -it [docker-register][/id]/devserver`
+`docker run -d --rm --name devserver -v "[code-folder]:/code/apps" -it [docker-register][/id]/devserver`
