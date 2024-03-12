@@ -4,10 +4,9 @@ Multiple versions of PHP and Node for Laravel development
 
 ## Disclaimer
 
-I am just learning Docker, this is a personal test implementation and is used in my daily workflow
+I'm just learning Docker, this is a personal test implementation and is used on my daily workflow
 
-The idea is to have a Docker container where I can connect and run any version of Laravel (3 - 11) (I have a lot of projects since ~10 years), without need to install all on my PC
-I just jump to the folder switch PHP or Node version and work on it (sudo update-alternatives --config php) (nvm use $NODE_VERSION)
+The idea is to have a Docker container where I can connect and run any version of Laravel (v3 - 11... I have a lot of projects for ~10 years), without need to install all on my PC, I just jump to the folder switch PHP and/or Node version and start working on it (sudo update-alternatives --config php) (nvm use $NODE_VERSION)
 
 ## Default values
 
@@ -15,6 +14,7 @@ I just jump to the folder switch PHP or Node version and work on it (sudo update
 - ARG DEV_USER=dev
 - ARG PHP_VERSIONS="5.6 7.2 7.4 8.0 8.1 8.2 8.3"
 - ARG PHP_LIBRARIES="pdo mysql mbstring xmlrpc soap gd xml cli zip fpm opcache curl"
+- ARG NODE_VERSIONS="10 12 18 21"
 
 ## Build with args and replace the values you need
 
