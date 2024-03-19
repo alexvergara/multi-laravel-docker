@@ -20,7 +20,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
 
 # Install required packages
-RUN apt-get install -y software-properties-common ${OS_PACKAGES}
+RUN apt-get install -y software-properties-common ${OS_PACKAGES} \
+  && rm -rf /var/lib/{apt,dpkg,cache,log}
 
 
 
@@ -56,6 +57,9 @@ RUN useradd -u 1000 -g ${DEV_USER} -m ${DEV_USER} -s /usr/bin/bash && echo "${DE
 RUN echo 'export NVM_DIR="$HOME/.nvm"' >> /home/${DEV_USER}/.bashrc
 RUN echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm' >> /home/${DEV_USER}/.bashrc
 RUN echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion' >> /home/${DEV_USER}/.bashrc
+
+RUN echo 'alias art="php artisan"' >> /hom/${DEV_USER}/.bashrc
+RUN echo 'alias serve="php artisan serve --host 0.0.0.0"' >> /hom/${DEV_USER}/.bashrc
 
 
 
