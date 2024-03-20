@@ -61,6 +61,15 @@ RUN echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # 
 RUN echo 'alias art="php artisan"' >> /hom/${DEV_USER}/.bashrc
 RUN echo 'alias serve="php artisan serve --host 0.0.0.0"' >> /hom/${DEV_USER}/.bashrc
 
+RUN cat <<EOT >> /home/${DEV_USER}/.bashrc
+
+parse_git_branch() {
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
+export PS1="\e[91m\]\$(parse_git_branch)\[\e[00m\] $PS1"
+
+EOT
 
 
 # Working directory
