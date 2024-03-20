@@ -15,11 +15,12 @@ The idea is to have a Docker container where I can connect and run any version o
 - ARG PHP_VERSIONS="5.6 7.2 7.4 8.0 8.1 8.2 8.3"
 - ARG PHP_LIBRARIES="pdo mysql mbstring xmlrpc soap gd xml cli zip fpm opcache curl"
 - ARG NODE_VERSIONS="10 12 18 21"
+- ARG DEV_NAME="laraserver"
 
 ## Build with args and replace the values you need
 
-`docker build --build-arg DEV_USER=user1 --build-args PHP_VERSIONS="7.3 8.1" -t [docker-register][/id]/devserver .`
+`docker build --build-arg DEV_USER=user1 --build-args PHP_VERSIONS="7.3 8.1" -t [docker-register][/id]/laraserver .`
 
 ## Run or register
 
-`docker run -d --rm --name devserver -v "[code-folder]:/code/apps" -it [docker-register][/id]/devserver`
+`docker run -d --rm --name laraserver -v "[code-folder]:/code/apps" -it [docker-register][/id]/laraserver`

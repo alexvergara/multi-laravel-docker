@@ -12,6 +12,7 @@ ARG DEV_USER=dev
 ARG PHP_VERSIONS="5.6 7.2 7.4 8.0 8.1 8.2 8.3"
 ARG PHP_LIBRARIES="pdo mysql mbstring xmlrpc soap gd xml cli zip fpm opcache curl"
 ARG NODE_VERSIONS="10 12 18 21"
+ARG DEV_NAME="laraserver"
 
 # Avoid user interaction
 ARG DEBIAN_FRONTEND=noninteractive
@@ -58,16 +59,17 @@ RUN echo 'export NVM_DIR="$HOME/.nvm"' >> /home/${DEV_USER}/.bashrc
 RUN echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm' >> /home/${DEV_USER}/.bashrc
 RUN echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion' >> /home/${DEV_USER}/.bashrc
 
-RUN echo 'alias art="php artisan"' >> /hom/${DEV_USER}/.bashrc
-RUN echo 'alias serve="php artisan serve --host 0.0.0.0"' >> /hom/${DEV_USER}/.bashrc
+RUN echo 'alias art="php artisan"' >> /home/${DEV_USER}/.bashrc
+RUN echo 'alias serve="php artisan serve --host 0.0.0.0"' >> /home/${DEV_USER}/.bashrc
 
+RUN echo "${DEV_NAME}" > /etc/debian_chroot
 RUN cat <<EOT >> /home/${DEV_USER}/.bashrc
 
 parse_git_branch() {
-     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 }
 
-export PS1="\e[91m\]\$(parse_git_branch)\[\e[00m\] $PS1"
+export PS1="${debian_chroot:+$debian_chroot}\e[01;36m\] ➜ \W \e[34m\]git:(\e[91m\]$(parse_git_branch)\e[34m\])\[\e[00m\] "
 
 EOT
 
